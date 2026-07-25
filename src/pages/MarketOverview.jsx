@@ -1,6 +1,5 @@
  import React, { useEffect, useState, useCallback } from "react";
 import { getMarketData } from "../services/api";
-import ErrorMessage from "../components/ErrorMessage";
 
 
 function MarketOverview() {
@@ -55,10 +54,11 @@ function MarketOverview() {
 
       {loading && (
 
-        <div className="text-center mt-4">
+        <div className="text-center mt-5">
+
           <div className="spinner-border"></div>
 
-          <p>
+          <p className="mt-2">
             Loading market data...
           </p>
 
@@ -69,7 +69,11 @@ function MarketOverview() {
 
 
       {error && (
-        <ErrorMessage message={error} />
+
+        <div className="alert alert-danger">
+          {error}
+        </div>
+
       )}
 
 
@@ -83,14 +87,14 @@ function MarketOverview() {
             marketData.map((stock, index) => (
 
               <div 
-                className="col-md-4 mb-3"
+                className="col-md-4 mb-3" 
                 key={index}
               >
 
                 <div className="card shadow p-3">
 
                   <h5>
-                    {stock.symbol || stock.name}
+                    {stock.symbol || stock.name || "Stock"}
                   </h5>
 
                   <p>
