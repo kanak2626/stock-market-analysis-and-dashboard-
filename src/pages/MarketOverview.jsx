@@ -1,45 +1,39 @@
- import React, { useEffect, useState, useCallback } from "react";
-import { getMarketData } from "../services/api";
+ import React, { useEffect, useState } from "react";
 
 
 function MarketOverview() {
 
   const [marketData, setMarketData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-
-  const loadMarketData = useCallback(async () => {
-
-    try {
-
-      setLoading(true);
-      setError("");
-
-      const data = await getMarketData();
-
-      setMarketData(data);
-
-    } catch (err) {
-
-      console.log(err);
-      setError("Failed to load market data");
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
-  }, []);
-
 
 
   useEffect(() => {
 
-    loadMarketData();
+    // temporary demo market data
+    const data = [
+      {
+        symbol: "AAPL",
+        price: "195.20",
+        change: "+1.5%"
+      },
+      {
+        symbol: "TSLA",
+        price: "245.80",
+        change: "-0.8%"
+      },
+      {
+        symbol: "MSFT",
+        price: "420.50",
+        change: "+2.1%"
+      }
+    ];
 
-  }, [loadMarketData]);
+
+    setMarketData(data);
+    setLoading(false);
+
+
+  }, []);
 
 
 
@@ -52,72 +46,43 @@ function MarketOverview() {
       </h2>
 
 
-      {loading && (
+      {loading ? (
 
-        <div className="text-center mt-5">
-
+        <div className="text-center">
           <div className="spinner-border"></div>
-
-          <p className="mt-2">
-            Loading market data...
-          </p>
-
+          <p>Loading market data...</p>
         </div>
 
-      )}
-
-
-
-      {error && (
-
-        <div className="alert alert-danger">
-          {error}
-        </div>
-
-      )}
-
-
-
-      {!loading && !error && (
+      ) : (
 
         <div className="row">
 
-          {marketData.length > 0 ? (
+          {marketData.map((stock, index) => (
 
-            marketData.map((stock, index) => (
+            <div 
+              className="col-md-4 mb-3"
+              key={index}
+            >
 
-              <div 
-                className="col-md-4 mb-3" 
-                key={index}
-              >
+              <div className="card shadow p-3">
 
-                <div className="card shadow p-3">
+                <h4>
+                  {stock.symbol}
+                </h4>
 
-                  <h5>
-                    {stock.symbol || stock.name || "Stock"}
-                  </h5>
+                <p>
+                  Price: ${stock.price}
+                </p>
 
-                  <p>
-                    Price: {stock.price || "N/A"}
-                  </p>
-
-                  <p>
-                    Change: {stock.change || "N/A"}
-                  </p>
-
-                </div>
+                <p>
+                  Change: {stock.change}
+                </p>
 
               </div>
 
-            ))
-
-          ) : (
-
-            <div className="alert alert-warning">
-              No market data available
             </div>
 
-          )}
+          ))}
 
         </div>
 
